@@ -1,7 +1,7 @@
 package core.controller;
 
 public enum CommandsList {
-    commandnotfound,
+    illegal,
     newDisk,
     newDoc,
     newDir,
@@ -9,7 +9,15 @@ public enum CommandsList {
     rename,
     changeDir,
     list,
-    rlist
-
-
+    rList,
+    newSimpleCri,
+    isDocument,
+    newNegation,
+    newBinaryCri,
+    printAllCriteria,
+    search,
+    rsearch,
+    save,
+    load,
+    quit
 }
