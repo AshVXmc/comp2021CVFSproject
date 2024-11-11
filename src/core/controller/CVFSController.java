@@ -48,14 +48,13 @@ public class CVFSController {
                 if (cvfs.getDir() == null)
                     throw new IllegalStateException("No disk detected. Please create a new disk.");
                 if (commandElements.length != 2)
-                    throw new IllegalArgumentException("Incorrect number of parameters. Command formula: [newDir dirName]");;
+                    throw new IllegalArgumentException("Incorrect number of parameters. Command formula: newDir [dirName]");;
                 resourceList = cvfs.parsePath(commandElements[1]);
                 dir = (Directory) resourceList[0];
                 name = (String) resourceList[1];
                 if (!DataUnit.isValidName(name))
                     throw new IllegalArgumentException("Illegal directory name: " + name);
                 dir.newDir(name);
-
                 break;
 
             case newDoc:
