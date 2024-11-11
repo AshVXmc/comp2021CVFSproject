@@ -1,6 +1,6 @@
 package core.controller;
 
-import core.model.Directory;
+import core.model.*;
 
 import java.util.HashMap;
 
@@ -31,6 +31,9 @@ public class CommandParser {
                 String docName = commandElements[1];
                 String docType = commandElements[2];
                 StringBuilder docContentBuilder = new StringBuilder();
+                if (!DocumentType.isValidType(docType)) {
+                    throw new IllegalArgumentException("Invalid document type. Allowed types are: txt, java, html, css.");
+                }
 
                 // Join the remaining elements as content
                 for (int i = 3; i < commandElements.length; i++) {
