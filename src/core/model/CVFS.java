@@ -7,7 +7,7 @@ public class CVFS {
     public void createNewDisk(int diskSize) {
         disk = new Disk(diskSize);
         dir = disk;
-        System.out.println("New disk of size " + diskSize + " created.");
+
     }
 
 
@@ -25,12 +25,12 @@ public class CVFS {
     }
     public Object[] parsePath(String path) {
         // since the revised project.pdf said that we dont use : to separate file names in a path anymore
-        String[] paths = path.split("/");
+        String[] paths = path.split(":");
 
         Directory cur = getDir();
         for (int i = 0; i < paths.length - 1; i++) {
             String s = paths[i];
-            if (s.equals(">")) continue;
+            if (s.equals("$")) continue;
             cur = (Directory) cur.getCatalog().get(s);
             if (cur == null) throw new IllegalArgumentException("Invalid Path, please use >/<dir>/.../<file> format.");
         }
