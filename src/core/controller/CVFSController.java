@@ -12,7 +12,7 @@ public class CVFSController {
     private final Scanner scanner = new Scanner(System.in);
 
     private String getScannerNextLine() {
-        return scanner.nextLine();
+        break scanner.nextLine();
     }
 
     public CVFSController(CVFS cvfsModel, CVFSView cvfsView) {
@@ -38,7 +38,7 @@ public class CVFSController {
 
         switch (commandType) {
             case newDir:
-                return;
+                break;
             case newDoc:
                 if (commandElements.length < 4) {
                     throw new IllegalArgumentException("Incorrect number of parameters. Command formula: [newDoc docName docType docContent]");
@@ -63,46 +63,46 @@ public class CVFSController {
                 } catch (Exception e) {
                     System.err.println("Error creating document: " + e.getMessage());
                 }
-                return;
+                break;
             case newDisk:
-                if (commandElements.length != 2) throw new IllegalArgumentException("Incorrect number of paramaters (Expected 2). Command formula: [newDisk diskSize]");
+                if (commandElements.length != 2) {
+                    throw new IllegalArgumentException("Incorrect number of paramaters (Expected 2). Command formula: 'newDisk [diskSize]'");
+                }
                 try {
-                    Integer.parseInt(commandElements[1]);
+                    int diskSize = Integer.parseInt(commandElements[1]);
+                    System.out.println("A new disk with size " + diskSize + "was successfully created.");
                 } catch (NumberFormatException e){
                     throw new NumberFormatException("Disk Size has to be a number.");
                 }
-                //cvfs.createNewDisk
-
-                System.out.println("NEW DIRECTORY WOHOO");
-                return;
+                break;
             case delete:
-                return;
+                break;
             case rename:
-                return;
+                break;
             case changeDir:
-                return;
+                break;
             case list:
-                return;
+                break;
             case rList:
-                return;
+                break;
             case newSimpleCri:
-                return;
+                break;
             case isDocument:
-                return;
+                break;
             case newNegation:
-                return;
+                break;
             case newBinaryCri:
-                return;
+                break;
             case printAllCriteria:
-                return;
+                break;
             case search:
-                return;
+                break;
             case rsearch:
-                return;
+                break;
             case save:
-                return;
+                break;
             case load:
-                return;
+                break;
             case quit:
                 System.exit(0);
         }
