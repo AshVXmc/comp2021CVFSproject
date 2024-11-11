@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class Directory extends DataUnit {
 
-    private HashMap<String, Directory> contents = new HashMap<>();
+    private HashMap<String, DataUnit> contents = new HashMap<>();
     private Directory parentDir;
     public Directory(String name, Directory parentDir){
         super(name);
@@ -16,8 +16,12 @@ public class Directory extends DataUnit {
         return parentDir;
     }
 
-    public void setParentDir(Directory newparentDir) {
-        parentDir = newparentDir;
+    public void setParentDir(DataUnit newParentDir) {
+        parentDir = (Directory) newParentDir;
+    }
+
+    public HashMap<String, DataUnit> getCatalog() {
+        return contents;
     }
 
 

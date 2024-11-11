@@ -7,17 +7,17 @@ import core.view.CVFSView;
 import java.util.Scanner;
 
 public class CVFSController {
-    private final CVFS cvfsModel;
-    private final CVFSView cvfsView;
+    private static CVFS cvfs = null;
+    private static CVFSView cvfsView = null;
     private final Scanner scanner = new Scanner(System.in);
 
     private String getScannerNextLine() {
         return scanner.nextLine();
     }
 
-    public CVFSController(CVFS cvfsModel, CVFSView cvfsView) {
-        this.cvfsModel = cvfsModel;
-        this.cvfsView = cvfsView;
+    public CVFSController(CVFS cvfs, CVFSView cvfsView) {
+        CVFSController.cvfs = cvfs;
+        CVFSController.cvfsView = cvfsView;
     }
 
     public void startCLITerminal(){
@@ -38,7 +38,9 @@ public class CVFSController {
 
         switch (commandType) {
             case newDir:
-                return;
+
+
+
             case newDoc:
                 if (commandElements.length < 4) {
                     throw new IllegalArgumentException("Incorrect number of parameters. Command formula: [newDoc docName docType docContent]");

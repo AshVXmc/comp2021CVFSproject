@@ -2,7 +2,7 @@ package core.model;
 
 import java.io.Serializable;
 
-public class DataUnit implements Serializable {
+public abstract class DataUnit implements Serializable {
     private String name;
     private int size;
 
@@ -16,6 +16,11 @@ public class DataUnit implements Serializable {
     public static boolean isValidNameSize(String name) {
         return name.length() <= 10 && !name.isEmpty();
     }
+
+    public String getName() {
+        return name;
+    }
+
     public void setSize(int size) {
         this.size = size;
     }
@@ -23,4 +28,11 @@ public class DataUnit implements Serializable {
     public int getSize() {
         return size;
     }
+
+    public abstract DataUnit getParentDir();
+    public String toString() {
+        return String.format(getName(), getSize());
+    }
+
+    public abstract void setParentDir(DataUnit newParentDir);
 }
