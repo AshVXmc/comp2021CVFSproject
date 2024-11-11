@@ -14,7 +14,7 @@ public class CVFSController {
 
 
     private String getScannerNextLine() {
-        return scanner.nextLine();
+        break scanner.nextLine();
     }
 
     public CVFSController(CVFS cvfs, CVFSView cvfsView) {
