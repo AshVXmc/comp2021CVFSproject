@@ -9,4 +9,14 @@ public class CVFS {
 
 
     }
+
+    public Directory getDir() {
+        return dir;
+    }
+
+    public void setDir(Directory dir) {
+        this.dir = dir;
+    }
+
+
 }

@@ -2,25 +2,14 @@ package core.controller;
 
 import core.model.*;
 
-import java.util.HashMap;
-
-public class CommandParser {
+public class CommandTypeGetter {
 
     public static void parseCommand(String command, CommandsList commandType) {
         Directory dir;
         String name;
         String[] commandElements = command.split(" ");
-
         switch (commandType) {
             case newDir:
-                if (commandElements.length != 2) throw new IllegalArgumentException("Incorrect number of paramaters (Expected 2). Command formula: [newDisk diskSize]");
-                try {
-                    Integer.parseInt(commandElements[1]);
-                } catch (NumberFormatException e){
-                    throw new NumberFormatException("Disk Size has to be a number.");
-                }
-
-
                 System.out.println("NEW DIRECTORY WOHOO");
                 return;
             case newDoc:
