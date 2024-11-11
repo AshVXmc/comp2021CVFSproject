@@ -1,6 +1,6 @@
 package core.controller;
 
-import core.model.Directory;
+import core.model.*;
 
 import java.util.HashMap;
 
@@ -24,6 +24,29 @@ public class CommandParser {
                 System.out.println("NEW DIRECTORY WOHOO");
                 return;
             case newDoc:
+                if (commandElements.length < 4) {
+                    throw new IllegalArgumentException("Incorrect number of parameters. Command formula: [newDoc docName docType docContent]");
+                }
+
+                String docName = commandElements[1];
+                String docType = commandElements[2];
+                StringBuilder docContentBuilder = new StringBuilder();
+                if (!DocumentType.isValidType(docType)) {
+                    throw new IllegalArgumentException("Invalid document type. Allowed types are: txt, java, html, css.");
+                }
+
+                // Join the remaining elements as content
+                for (int i = 3; i < commandElements.length; i++) {
+                    docContentBuilder.append(commandElements[i]).append(" ");
+                }
+                String docContent = docContentBuilder.toString().trim();
+
+                try {
+                    System.out.println("Document '" + docName + "." + docType + "' created successfully.");
+                    System.out.println("Document Content: " + docContent);
+                } catch (Exception e) {
+                    System.err.println("Error creating document: " + e.getMessage());
+                }
                 return;
             case newDisk:
                 return;
