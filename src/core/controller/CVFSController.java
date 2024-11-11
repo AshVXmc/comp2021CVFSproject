@@ -14,7 +14,7 @@ public class CVFSController {
 
 
     private String getScannerNextLine() {
-        break scanner.nextLine();
+        return scanner.nextLine();
     }
 
     public CVFSController(CVFS cvfs, CVFSView cvfsView) {
@@ -41,6 +41,8 @@ public class CVFSController {
         String[] commandElements = command.split(" ");
 
         switch (commandType) {
+            case illegal:
+                System.err.println("Illegal command. Please try again.");
             case newDir:
                 if (cvfs.getDir() == null)
                     throw new IllegalStateException("No disk detected. Please create a new disk.");
