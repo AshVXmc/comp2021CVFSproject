@@ -37,11 +37,24 @@ public class CVFSController {
         String[] commandElements = command.split(" ");
 
         switch (commandType) {
+            case illegal:
+                System.err.println("Illegal command, try again.");
+                break;
             case newDir:
+                if (commandElements.length != 2) {
+                    throw new IllegalArgumentException("Incorrect number of parameters. Command formula: newDir [dirName]");
+                }
+                name = commandElements[1];
+                try {
+                    dir = cvfs.newDir(name);
+                    System.out.println("Directory '" + name + "' created successfully.");
+                } catch (Exception e) {
+                    System.err.println("Error creating directory: " + e.getMessage());
+                }
                 break;
             case newDoc:
                 if (commandElements.length < 4) {
-                    throw new IllegalArgumentException("Incorrect number of parameters. Command formula: [newDoc docName docType docContent]");
+                    throw new IllegalArgumentException("Incorrect number of parameters. Command formula: newDoc [docName] [docType] [docContent]");
                 }
 
                 String docName = commandElements[1];
@@ -66,7 +79,7 @@ public class CVFSController {
                 break;
             case newDisk:
                 if (commandElements.length != 2) {
-                    throw new IllegalArgumentException("Incorrect number of paramaters (Expected 2). Command formula: 'newDisk [diskSize]'");
+                    throw new IllegalArgumentException("Incorrect number of paramaters (Expected 2). Command formula: newDisk [diskSize]");
                 }
                 try {
                     int diskSize = Integer.parseInt(commandElements[1]);
