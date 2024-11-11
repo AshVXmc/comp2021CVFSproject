@@ -14,7 +14,7 @@ public class CVFSController {
 
 
     private String getScannerNextLine() {
-        return scanner.nextLine();
+        break scanner.nextLine();
     }
 
     public CVFSController(CVFS cvfs, CVFSView cvfsView) {
@@ -82,15 +82,16 @@ public class CVFSController {
                     System.err.println("Error creating document: " + e.getMessage());
                 }
                 break;
-
             case newDisk:
-                if (commandElements.length != 2) throw new IllegalArgumentException("Incorrect number of paramaters (Expected 2). Command formula: [newDisk diskSize]");
+                if (commandElements.length != 2) {
+                    throw new IllegalArgumentException("Incorrect number of paramaters (Expected 2). Command formula: 'newDisk [diskSize]'");
+                }
                 try {
-                    cvfs.createNewDisk(Integer.parseInt(commandElements[1]));
+                    int diskSize = Integer.parseInt(commandElements[1]);
+                    System.out.println("A new disk with size " + diskSize + "was successfully created.");
                 } catch (NumberFormatException e){
                     throw new NumberFormatException("Disk Size has to be a number.");
                 }
-
                 break;
             case delete:
                 break;
