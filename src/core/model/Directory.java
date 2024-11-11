@@ -9,7 +9,7 @@ public class Directory extends DataUnit {
     private Directory parentDir;
     public Directory(String name, Directory parentDir){
         super(name);
-        this.parentDir = parentDir;
+        setParentDir(parentDir);
     }
 
     public Directory getParentDir() {
@@ -27,15 +27,23 @@ public class Directory extends DataUnit {
 
     public Directory newDir(String name) {
         if (contents.get(name) != null) throw new IllegalArgumentException("A file of this name already exists.");
-        Directory temp = new Directory(name, this);
-        updateSizeBy(temp.getSize());
-        contents.put(name, temp);
-        return temp;
+        Directory dir = new Directory(name, this);
+        updateSizeBy(dir.getSize());
+        contents.put(name, dir);
+        System.out.println("New directory named " + name + " created.");
+        return dir;
     }
 
     public void updateSizeBy(int offset) {
-        getParentDir().updateSizeBy(offset);
-        setSize(getSize() + offset);
+        if (getParentDir() != null) {
+            getParentDir().updateSizeBy(offset);
+            setSize(getSize() + offset);
+        }
+    }
+    public StringBuilder getPath() {
+        StringBuilder builtString = getParentDir().getPath();
+        builtString.append('/').append(getName());
+        return builtString;
     }
 
 

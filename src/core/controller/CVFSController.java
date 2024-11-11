@@ -1,5 +1,6 @@
 package core.controller;
 import core.model.CVFS;
+import core.model.DataUnit;
 import core.model.Directory;
 import core.model.DocumentType;
 import core.view.CVFSView;
@@ -10,6 +11,7 @@ public class CVFSController {
     private static CVFS cvfs = null;
     private static CVFSView cvfsView = null;
     private final Scanner scanner = new Scanner(System.in);
+
 
     private String getScannerNextLine() {
         return scanner.nextLine();
@@ -32,13 +34,27 @@ public class CVFSController {
         parseCommand(cmd, cmdType);
     }
     public static void parseCommand(String command, CommandsList commandType) {
-        Directory dir;
+        Object[] resourceList;
         String name;
+        Directory dir;
+
         String[] commandElements = command.split(" ");
 
         switch (commandType) {
             case newDir:
+                if (cvfs.getDir() == null)
+                    throw new IllegalStateException("No disk detected. Please create a new disk.");
+                if (commandElements.length != 2)
+                    throw new IllegalArgumentException("Incorrect number of parameters. Command formula: [newDir dirName]");;
+                resourceList = cvfs.parsePath(commandElements[1]);
+                dir = (Directory) resourceList[0];
+                name = (String) resourceList[1];
+                if (!DataUnit.isValidName(name))
+                    throw new IllegalArgumentException("Illegal directory name: " + name);
 
+                dir.newDir(name);
+
+                break;
 
 
             case newDoc:
@@ -65,46 +81,45 @@ public class CVFSController {
                 } catch (Exception e) {
                     System.err.println("Error creating document: " + e.getMessage());
                 }
-                return;
+                break;
+
             case newDisk:
                 if (commandElements.length != 2) throw new IllegalArgumentException("Incorrect number of paramaters (Expected 2). Command formula: [newDisk diskSize]");
                 try {
-                    Integer.parseInt(commandElements[1]);
+                    cvfs.createNewDisk(Integer.parseInt(commandElements[1]));
                 } catch (NumberFormatException e){
                     throw new NumberFormatException("Disk Size has to be a number.");
                 }
-                //cvfs.createNewDisk
 
-                System.out.println("NEW DIRECTORY WOHOO");
-                return;
+                break;
             case delete:
-                return;
+                break;
             case rename:
-                return;
+                break;
             case changeDir:
-                return;
+                break;
             case list:
-                return;
+                break;
             case rList:
-                return;
+                break;
             case newSimpleCri:
-                return;
+                break;
             case isDocument:
-                return;
+                break;
             case newNegation:
-                return;
+                break;
             case newBinaryCri:
-                return;
+                break;
             case printAllCriteria:
-                return;
+                break;
             case search:
-                return;
+                break;
             case rsearch:
-                return;
+                break;
             case save:
-                return;
+                break;
             case load:
-                return;
+                break;
             case quit:
                 System.exit(0);
         }
