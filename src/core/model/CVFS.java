@@ -6,8 +6,13 @@ public class CVFS {
 
     public void createNewDisk(int diskSize) {
         disk = new Disk(diskSize);
+        dir = disk;
+        System.out.println("\033[32mNew disk created, size: \033[33m" + diskSize + "\033[0m");
+    }
 
-
+    public void setDisk(Disk disk) {
+        this.disk = disk;
+        dir = disk;
     }
 
     public Directory getDir() {
