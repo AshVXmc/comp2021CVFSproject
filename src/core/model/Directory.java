@@ -3,12 +3,12 @@ package core.model;
 import java.io.Serializable;
 import java.util.HashMap;
 
-public class Directory implements Serializable {
-    private String name;
-    private HashMap<String, Document> contents = new HashMap<>();
+public class Directory extends DataUnit {
+
+    private HashMap<String, Directory> contents = new HashMap<>();
     private Directory parentDir;
     public Directory(String name, Directory parentDir){
-        this.name = name;
+        super(name);
         this.parentDir = parentDir;
     }
 
@@ -19,12 +19,19 @@ public class Directory implements Serializable {
     public void setParentDir(Directory newparentDir) {
         parentDir = newparentDir;
     }
-    public static boolean isValidName(String name) {
-        return name.matches("^[a-zA-Z0-9]{1,10}$");
+
+
+    public Directory newDir(String name) {
+        if (contents.get(name) != null) throw new IllegalArgumentException("A file of this name already exists.");
+        Directory temp = new Directory(name, this);
+        updateSizeBy(temp.getSize());
+        contents.put(name, temp);
+        return temp;
     }
 
-    public static boolean isValidNameSize(String name) {
-        return name.length() <= 10 && !name.isEmpty();
+    public void updateSizeBy(int offset) {
+        getParentDir().updateSizeBy(offset);
+        setSize(getSize() + offset);
     }
 
 
