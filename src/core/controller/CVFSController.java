@@ -65,10 +65,12 @@ public class CVFSController {
                 String docName = commandElements[1];
                 String docType = commandElements[2];
                 StringBuilder docContentBuilder = new StringBuilder();
-                if (!DocumentType.isValidType(docType)) {
+                if (!DocumentType.isValidType(docType))
                     throw new IllegalArgumentException("Invalid document type. Allowed types are: txt, java, html, css.");
-                }
-
+                if (!DataUnit.isValidName(docName))
+                    throw new IllegalArgumentException("Invalid document name " + docName + ". Only English letters and digits are allowed.");
+                if (docName.length() > 10)
+                    throw new IllegalArgumentException("Invalid document name length, must be 10 characters or less.");
                 // Join the remaining elements as content
                 for (int i = 3; i < commandElements.length; i++) {
                     docContentBuilder.append(commandElements[i]).append(" ");
@@ -76,26 +78,65 @@ public class CVFSController {
                 String docContent = docContentBuilder.toString().trim();
 
                 try {
-                    System.out.println("Document '" + docName + "." + docType + "' created successfully.");
-                    System.out.println("Document Content: " + docContent);
+                    resourceList = cvfs.parsePath(commandElements[1]);
+                    dir = (Directory) resourceList[0];
+                    name = (String) resourceList[1];
+                    dir.createNewDocument(name, DocumentType.getDocumentType(docType), docContent);
                 } catch (Exception e) {
                     System.err.println("Error creating document: " + e.getMessage());
                 }
                 break;
             case newDisk:
                 if (commandElements.length != 2)
-                    throw new IllegalArgumentException("Incorrect number of paramaters (Expected 2). Command formula: [newDisk diskSize]");
-                try {
-                    int diskSize = Integer.parseInt(commandElements[1]);
-                    cvfs.createNewDisk(diskSize);
-                    System.out.println("New disk of size " + diskSize + " created.");
+                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 2). Command formula: newDisk [diskSize]");
+                int diskSize;
+                try {diskSize = Integer.parseInt(commandElements[1]);
                 } catch (NumberFormatException e){
                     throw new NumberFormatException("Disk Size has to be a number.");
                 }
+                if (diskSize <= 0)
+                    throw new IllegalArgumentException("Disk size must be greater than 0.");
+                try {
+                    cvfs.createNewDisk(diskSize);
+                } catch (Exception e) {
+                    System.err.println("Error creating new disk: " + e.getMessage());
+                }
+
                 break;
             case delete:
+                if (commandElements.length != 2)
+                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 2). Command formula: delete [fileName]");
+                if (cvfs.getDir() == null)
+                    throw new IllegalStateException("No disk detected. Please create a new disk.");
+                try {
+                    resourceList = cvfs.parsePath(commandElements[1]);
+                    dir = (Directory) resourceList[0];
+                    name = (String) resourceList[1];
+                    if (!DataUnit.isValidName(name))
+                        throw new IllegalArgumentException("Invalid file name: " + name);
+                    dir.deleteDocument(name);
+                } catch (Exception e) {
+                    System.err.println("Error deleting document: " + e.getMessage());
+                }
                 break;
             case rename:
+                if (commandElements.length != 3)
+                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 3). Command formula: rename [oldFileName] [newFileName]");
+                if (cvfs.getDir() == null)
+                    throw new IllegalStateException("Please first create a disk.");
+                String newName = commandElements[2];
+                if (!DataUnit.isValidName(newName))
+                    throw new IllegalArgumentException("New name is invalid: " + newName);
+                try {
+                    resourceList = cvfs.parsePath(commandElements[1]);
+                    dir = (Directory) resourceList[0];
+                    name = (String) resourceList[1];
+                    if (!DataUnit.isValidName(name))
+                        throw new IllegalArgumentException("Old name is invalid: " + name);
+                    dir.renameDocument(name, newName);
+                } catch (Exception e) {
+                    System.err.println("Error renaming document: " + e.getMessage());
+                }
                 break;
             case changeDir:
                 break;

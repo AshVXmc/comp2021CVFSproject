@@ -8,7 +8,7 @@ public class Main {
         CVFSView cvfsView = new CVFSView();
         CVFSController cvfsController = new CVFSController(cvfsModel, cvfsView);
 
-        cvfsView.init();
+        cvfsView.initialize();
 
         while (true) cvfsController.startCLITerminal();
     }

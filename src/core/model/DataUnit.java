@@ -17,6 +17,7 @@ public abstract class DataUnit implements Serializable {
         return name.length() <= 10 && !name.isEmpty();
     }
 
+
     public String getName() {
         return name;
     }
@@ -35,4 +36,8 @@ public abstract class DataUnit implements Serializable {
     }
 
     public abstract void setParentDir(DataUnit newParentDir);
+
+    protected void setName(String newName) {
+        name = newName;
+    }
 }

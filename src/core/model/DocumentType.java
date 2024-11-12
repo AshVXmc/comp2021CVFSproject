@@ -25,4 +25,15 @@ public enum DocumentType {
         }
         return false;
     }
+
+    public static DocumentType getDocumentType(String input) {
+        switch (input) {
+            case "txt": return TXT;
+            case "java": return JAVA;
+            case "html": return HTML;
+            case "css": return CSS;
+            default: return null;
+        }
+
+    }
 }
