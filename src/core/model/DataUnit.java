@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public abstract class DataUnit implements Serializable {
     private String name;
+
     private int size;
 
     public DataUnit(String name) {

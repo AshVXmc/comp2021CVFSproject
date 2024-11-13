@@ -17,6 +17,9 @@ public class Document extends DataUnit {
     public int getDocumentSize() {
         return 40 + content.length() * 2;
     }
+    public DocumentType getType() {
+        return type;
+    }
 
     @Override
     public DataUnit getParentDir() {

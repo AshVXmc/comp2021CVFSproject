@@ -19,5 +19,7 @@ public enum CommandsList {
     rsearch,
     save,
     load,
-    quit
+    quit,
+    // Helper
+    getCurrentDir
 }

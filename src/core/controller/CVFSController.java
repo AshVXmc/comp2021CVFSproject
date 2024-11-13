@@ -42,7 +42,7 @@ public class CVFSController {
 
         switch (commandType) {
             case illegal:
-                System.err.println("Illegal command, try again.");
+                System.out.println("Command not found.");
                 break;
             case newDir:
                 if (cvfs.getDir() == null)
@@ -58,9 +58,10 @@ public class CVFSController {
                 break;
 
             case newDoc:
-                if (commandElements.length < 4) {
+                if (commandElements.length < 4)
                     throw new IllegalArgumentException("Incorrect number of parameters. Command formula: newDoc [docName] [docType] [docContent]");
-                }
+                if (cvfs.getDir() == null)
+                    throw new IllegalStateException("No disk detected. Please create a new disk.");
 
                 String docName = commandElements[1];
                 String docType = commandElements[2];
@@ -139,10 +140,33 @@ public class CVFSController {
                 }
                 break;
             case changeDir:
+                if (cvfs.getDir() == null)
+                    throw new IllegalStateException("No disk detected. Please create a new disk.");
+                if (commandElements.length != 2)
+                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 2). Command formula: changeDir [dirName]");
+                String newDirName = commandElements[1];
+                cvfs.changeDirectory(newDirName);
                 break;
+            // helper function, is not part of the requirement
+            case getCurrentDir:
+                if (cvfs.getDir() == null)
+                    throw new IllegalStateException("No disk detected. Please create a new disk.");
+                System.out.println("Current directory:" + cvfs.getDir().getName());
+                break;
+            /////
             case list:
+                if (cvfs.getDir() == null)
+                    throw new IllegalStateException("No disk detected. Please create a new disk.");
+                if (commandElements.length != 1)
+                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 1). Command formula: list");
+                cvfs.getDir().listAllFiles();
                 break;
             case rList:
+                if (cvfs.getDir() == null)
+                    throw new IllegalStateException("No disk detected. Please create a new disk.");
+                if (commandElements.length != 1)
+                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 1). Command formula: list");
+                cvfs.getDir().recursivelyListAllFIles();
                 break;
             case newSimpleCri:
                 break;

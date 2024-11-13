@@ -1,13 +1,28 @@
 package core.model;
+import javax.print.Doc;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class Directory extends DataUnit {
 
-    private HashMap<String, DataUnit> contents = new HashMap<>();
+    private Map<String, DataUnit> contents = new HashMap<>();
     private Directory parentDir;
     public Directory(String name, Directory parentDir){
         super(name);
         setParentDir(parentDir);
+    }
+
+
+    public int getSize(Directory currentDirectory) {
+        int size = 0;
+        for (DataUnit dataUnit : currentDirectory.getContents().values()) {
+            if (dataUnit.getParentDir() == currentDirectory && !Objects.equals(currentDirectory.getName(), "Disk")) {
+                size += dataUnit.getSize();
+                System.out.println("doc counted: " + dataUnit.getName());
+            }
+        }
+        return 40 + size;
     }
 
     public Directory getParentDir() {
@@ -18,7 +33,7 @@ public class Directory extends DataUnit {
         parentDir = (Directory) newParentDir;
     }
 
-    public HashMap<String, DataUnit> getCatalog() {
+    public Map<String, DataUnit> getContents() {
         return contents;
     }
 
@@ -76,6 +91,38 @@ public class Directory extends DataUnit {
         contents.remove(oldName);
         contents.put(newName, renamedDocument);
         System.out.println("Successfully renamed document.\n" + "Old name: " + oldName + "\nNew name: " + newName);
+    }
+
+    public void listAllFiles() {
+        if (contents.isEmpty())
+            System.out.println("Current directory is empty");
+        for (DataUnit dataUnit : contents.values()) {
+            if (dataUnit instanceof Directory)
+                System.out.println("-> (Directory) Name: " + dataUnit + ", Size: " + getSize());
+            if (dataUnit instanceof Document)
+                System.out.println("-> (Document) Name: " + dataUnit + ", Type: " + ((Document) dataUnit).getType() + ", Size: " + dataUnit.getSize());
+        }
+    }
+
+    public void recursivelyListAllFIles() {
+        if (contents.isEmpty())
+            System.out.println("Current directory is empty.");
+        recursivelyListAllFIles(this, 0);
+    }
+
+    public void recursivelyListAllFIles(Directory currentDirectory, int fileLevel) {
+        for (DataUnit dataUnit : currentDirectory.getContents().values()) {
+
+            for (int i = 0; i < fileLevel; i++)
+                System.out.print("\t");
+            if (dataUnit instanceof Document)
+                System.out.println("-> (Document) Name: " + dataUnit + ", Type: " + ((Document) dataUnit).getType() + ", Size: " + dataUnit.getSize());
+            else {
+                System.out.println("-> (Directory) Name: " + dataUnit + ", Size: " + getSize(currentDirectory));
+
+                recursivelyListAllFIles((Directory) dataUnit, fileLevel + 1);
+            }
+        }
     }
 
 

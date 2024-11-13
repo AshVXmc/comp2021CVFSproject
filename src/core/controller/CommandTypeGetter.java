@@ -57,6 +57,10 @@ public class CommandTypeGetter {
 
             case "quit":
                 return CommandsList.quit;
+
+            // helper function
+            case "getCurrentDir":
+                return CommandsList.getCurrentDir;
         }
         if (command == "") {
             System.out.println("Command line is empty. Please enter a command.");
