@@ -1,5 +1,9 @@
 package core.model;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+
 public class CVFS {
     private Disk disk;
     private Directory dir;
@@ -56,6 +60,29 @@ public class CVFS {
         if (!(newDir instanceof Directory))  throw new IllegalArgumentException("Not a directory.");
         setDir((Directory) newDir);
         System.out.println("Changed current working directory to '" + newDirName + "'");
+    }
+
+    public void save(String filePath) {
+        try {
+            FileOutputStream fileOut = new FileOutputStream(filePath);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(disk);
+            out.close();
+            fileOut.close();
+            System.out.println("Disk saved to " + filePath);
+        } catch (IOException e) {
+            System.err.println("Error saving disk: " + e.getMessage());
+        }
+    }
+
+    public void load(String filePath) {
+        try {
+            disk = Disk.loadDisk(filePath);
+            dir = disk;
+            System.out.println("Disk loaded from " + filePath);
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error loading disk: " + e.getMessage());
+        }
     }
 
 }

@@ -183,8 +183,14 @@ public class CVFSController {
             case rsearch:
                 break;
             case save:
+                if (commandElements.length != 2)
+                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 2). Command formula: save [filePath]");
+                cvfs.save(commandElements[1]);
                 break;
             case load:
+                if (commandElements.length != 2)
+                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 2). Command formula: load [filePath]");
+                cvfs.load(commandElements[1]);
                 break;
             case quit:
                 System.exit(0);
