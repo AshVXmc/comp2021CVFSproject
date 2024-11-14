@@ -14,11 +14,6 @@ public abstract class DataUnit implements Serializable {
         return name.matches("^[a-zA-Z0-9]{1,10}$");
     }
 
-    public static boolean isValidNameSize(String name) {
-        return name.length() <= 10 && !name.isEmpty();
-    }
-
-
     public String getName() {
         return name;
     }

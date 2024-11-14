@@ -98,7 +98,7 @@ public class Directory extends DataUnit {
             System.out.println("Current directory is empty");
         for (DataUnit dataUnit : contents.values()) {
             if (dataUnit instanceof Directory)
-                System.out.println("-> (Directory) Name: " + dataUnit + ", Size: " + getSize());
+                System.out.println("-> (Directory) Name: " + dataUnit + ", Size: " + getSize(this));
             if (dataUnit instanceof Document)
                 System.out.println("-> (Document) Name: " + dataUnit + ", Type: " + ((Document) dataUnit).getType() + ", Size: " + dataUnit.getSize());
         }
