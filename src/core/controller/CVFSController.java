@@ -1,8 +1,5 @@
 package core.controller;
-import core.model.CVFS;
-import core.model.DataUnit;
-import core.model.Directory;
-import core.model.DocumentType;
+import core.model.*;
 import core.view.CVFSView;
 
 import java.util.Scanner;
@@ -169,6 +166,16 @@ public class CVFSController {
                 cvfs.getDir().recursivelyListAllFIles();
                 break;
             case newSimpleCri:
+                if (commandElements.length != 5)
+                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 5). Command formula: newSimpleCri [criName] [attrName] [op] [val]");
+                if (!SimpleCriterion.isValidCriterionName(commandElements[1]))
+                    throw new IllegalArgumentException("Invalid Criterion name '" + commandElements[1] + "'");
+                if (!SimpleCriterion.isValidCriterion(commandElements[1], commandElements[2], commandElements[3], commandElements[4]))
+                    throw new IllegalArgumentException("Invalid Criterion argument " +
+                            "'" + commandElements[2] + " " + commandElements[3] + " " + commandElements[4] + "'");
+
+                cvfs.createNewCriterion(commandElements[1], commandElements[2], commandElements[3], commandElements[4]);
+
                 break;
             case isDocument:
                 break;

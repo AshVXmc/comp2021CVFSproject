@@ -58,4 +58,8 @@ public class CVFS {
         System.out.println("Changed current working directory to '" + newDirName + "'");
     }
 
+    public void createNewCriterion(String criName, String attrName, String op, String val) {
+
+    }
+
 }
