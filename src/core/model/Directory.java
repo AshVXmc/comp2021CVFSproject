@@ -17,7 +17,7 @@ public class Directory extends DataUnit {
     public int getSize(Directory currentDirectory) {
         int size = 0;
         for (DataUnit dataUnit : currentDirectory.getContents().values()) {
-            if (dataUnit.getParentDir() == currentDirectory && Objects.equals(currentDirectory.getName(), "Disk")) {
+            if (dataUnit.getParentDir() == currentDirectory) {
                 size += dataUnit.getSize();
                 System.out.println("doc counted: " + dataUnit.getName());
             }

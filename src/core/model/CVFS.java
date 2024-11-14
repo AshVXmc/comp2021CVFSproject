@@ -62,6 +62,10 @@ public class CVFS {
         System.out.println("Changed current working directory to '" + newDirName + "'");
     }
 
+    public void createNewCriterion(String criName, String attrName, String op, String val) {
+
+    }
+
     public void save(String filePath) {
         try {
             FileOutputStream fileOut = new FileOutputStream(filePath);
