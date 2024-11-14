@@ -48,7 +48,7 @@ public class CVFS {
             if (dir.getParentDir() == null)
                 throw new IllegalArgumentException("Current directory is the root directory.");
             setDir(dir.getParentDir());
-            System.out.println("Changed current working directory to '" + newDirName + "'");
+            System.out.println("Changed current working directory to '" + getDir() + "'");
             return;
         }
         DataUnit newDir = directory.getContents().get(name);
