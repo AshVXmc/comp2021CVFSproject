@@ -2,6 +2,7 @@ package core.controller;
 import core.model.*;
 import core.view.CVFSView;
 
+import java.util.Objects;
 import java.util.Scanner;
 
 public class CVFSController {
@@ -166,24 +167,44 @@ public class CVFSController {
                 cvfs.getDir().recursivelyListAllFIles();
                 break;
             case newSimpleCri:
+                if (commandElements.length == 2 && Objects.equals(commandElements[1], "isDocument")) {
+                    cvfs.createNewIsDocumentCriterion();
+                    break;
+                }
                 if (commandElements.length != 5)
                     throw new IllegalArgumentException("Incorrect number of parameters (Expected 5). Command formula: newSimpleCri [criName] [attrName] [op] [val]");
                 if (!SimpleCriterion.isValidCriterionName(commandElements[1]))
-                    throw new IllegalArgumentException("Invalid Criterion name '" + commandElements[1] + "'");
+                    throw new IllegalArgumentException("Invalid Simple Criterion name: '" + commandElements[1] + "'");
                 if (!SimpleCriterion.isValidCriterion(commandElements[1], commandElements[2], commandElements[3], commandElements[4]))
-                    throw new IllegalArgumentException("Invalid Criterion argument " +
-                            "'" + commandElements[2] + " " + commandElements[3] + " " + commandElements[4] + "'");
-
-                cvfs.createNewCriterion(commandElements[1], commandElements[2], commandElements[3], commandElements[4]);
-
-                break;
-            case isDocument:
+                    throw new IllegalArgumentException("Invalid Simple Criterion argument(s): " + "'" + commandElements[2] + " " + commandElements[3] + " " + commandElements[4] + "'");
+                cvfs.createNewSimpleCriterion(commandElements[1], commandElements[2], commandElements[3], commandElements[4]);
                 break;
             case newNegation:
+                if (commandElements.length != 3)
+                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 3). Command formula: newNegation [criName1] [criName2]");
+                if (!SimpleCriterion.isValidCriterionName(commandElements[1]))
+                    throw new IllegalArgumentException("Invalid Simple Criterion name: '" + commandElements[1] + "'");
+                if (!SimpleCriterion.isValidCriterionName(commandElements[2]))
+                    throw new IllegalArgumentException("Invalid Simple Criterion name: '" + commandElements[2] + "'");
+                cvfs.createNewNegation(commandElements[1], commandElements[2]);
                 break;
             case newBinaryCri:
+                if (commandElements.length != 5)
+                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 5). Command formula: newBinaryCri [criName1] [criName3] [logicOp] [criName4]");
+                if (!SimpleCriterion.isValidCriterionName(commandElements[1]))
+                    throw new IllegalArgumentException("Invalid Criterion name: '" + commandElements[1] + "'");
+                if (!SimpleCriterion.isValidCriterionName(commandElements[2]))
+                    throw new IllegalArgumentException("Invalid Criterion name: '" + commandElements[2] + "'");
+                if (!BinaryCriterion.isValidOp(commandElements[3]))
+                    throw new IllegalArgumentException("Invalid Binary Criterion operator: '" + commandElements[2] + "'");
+                if (!SimpleCriterion.isValidCriterionName(commandElements[4]))
+                    throw new IllegalArgumentException("Invalid Criterion name: '" + commandElements[4] + "'");
+                cvfs.createNewBinaryCriterion(commandElements[1], commandElements[2], commandElements[3], commandElements[4]);
                 break;
             case printAllCriteria:
+                if (commandElements.length != 1)
+                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 1). Command formula: printAllCriteria");
+                cvfs.printAllCriteria();
                 break;
             case search:
                 break;

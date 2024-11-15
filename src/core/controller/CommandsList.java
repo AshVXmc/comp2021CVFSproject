@@ -11,7 +11,6 @@ public enum CommandsList {
     list,
     rList,
     newSimpleCri,
-    isDocument,
     newNegation,
     newBinaryCri,
     printAllCriteria,

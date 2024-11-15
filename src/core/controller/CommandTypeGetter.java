@@ -32,9 +32,6 @@ public class CommandTypeGetter {
 
             case "newSimpleCri":
                 return CommandsList.newSimpleCri;
-
-            case "isDocument":
-                return CommandsList.isDocument;
             case "newNegation":
                 return CommandsList.newNegation;
 
