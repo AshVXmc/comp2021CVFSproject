@@ -26,7 +26,7 @@ public abstract class DataUnit implements Serializable {
         return size;
     }
 
-    public abstract String getType();
+    public abstract DocumentType getType();
 
     public abstract DataUnit getParentDir();
     public String toString() {

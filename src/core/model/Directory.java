@@ -6,6 +6,11 @@ import java.util.Objects;
 
 public class Directory extends DataUnit {
 
+    @Override
+    public DocumentType getType() {
+        return null;
+    }
+    
     private Map<String, DataUnit> contents = new HashMap<>();
     private Directory parentDir;
     public Directory(String name, Directory parentDir){

@@ -32,6 +32,7 @@ public class CommandTypeGetter {
 
             case "newSimpleCri":
                 return CommandsList.newSimpleCri;
+                
             case "newNegation":
                 return CommandsList.newNegation;
 
@@ -45,10 +46,11 @@ public class CommandTypeGetter {
                 return CommandsList.search;
 
             case "rSearch":
-                return CommandsList.rsearch;
+                return CommandsList.rSearch;
 
             case "save":
                 return CommandsList.save;
+
             case "load":
                 return CommandsList.load;
 

@@ -1,5 +1,6 @@
 package core.model;
 
+
 public class Document extends DataUnit {
     private final String name;
     private final DocumentType type;
@@ -17,6 +18,7 @@ public class Document extends DataUnit {
     public int getDocumentSize() {
         return 40 + content.length() * 2;
     }
+    @Override
     public DocumentType getType() {
         return type;
     }
