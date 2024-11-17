@@ -2,6 +2,7 @@ package core.controller;
 import core.model.*;
 import core.view.CVFSView;
 
+import javax.script.ScriptException;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -196,7 +197,7 @@ public class CVFSController {
                 if (!SimpleCriterion.isValidCriterionName(commandElements[2]))
                     throw new IllegalArgumentException("Invalid Criterion name: '" + commandElements[2] + "'");
                 if (!BinaryCriterion.isValidOp(commandElements[3]))
-                    throw new IllegalArgumentException("Invalid Binary Criterion operator: '" + commandElements[2] + "'");
+                    throw new IllegalArgumentException("Invalid Binary Criterion operator: '" + commandElements[3] + "'");
                 if (!SimpleCriterion.isValidCriterionName(commandElements[4]))
                     throw new IllegalArgumentException("Invalid Criterion name: '" + commandElements[4] + "'");
                 cvfs.createNewBinaryCriterion(commandElements[1], commandElements[2], commandElements[3], commandElements[4]);
@@ -207,9 +208,23 @@ public class CVFSController {
                 cvfs.printAllCriteria();
                 break;
             case search:
+                if (cvfs.getDir() == null)
+                    throw new IllegalStateException("No disk detected. Please create a new disk.");
+                if (commandElements.length != 2)
+                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 2). Command formula: search [criName]");
+                if (cvfs.getCriterion(commandElements[1]) == null)
+                    throw new IllegalArgumentException("Criterion named '" + commandElements[1] + "' is not found.");
+                cvfs.getDir().search(cvfs.getCriterion(commandElements[1]));
                 break;
             case rsearch:
-                break;
+//                if (cvfs.getDir() == null)
+//                    throw new IllegalStateException("No disk detected. Please create a new disk.");
+//                if (commandElements.length != 2)
+//                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 2). Command formula: rSearch [criName]");
+//                if (cvfs.getCriterion(commandElements[1]) == null)
+//                    throw new IllegalArgumentException("Criterion named '" + commandElements[1] + "' is not found.");
+//                cvfs.getDir().recursivelySearch(cvfs.getCriterion(commandElements[1]));
+//                break;
             case save:
                 if (commandElements.length != 2)
                     throw new IllegalArgumentException("Incorrect number of parameters (Expected 2). Command formula: save [filePath]");

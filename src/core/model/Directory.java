@@ -1,12 +1,11 @@
 package core.model;
-import javax.print.Doc;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class Directory extends DataUnit {
 
-    private Map<String, DataUnit> contents = new HashMap<>();
+    private static Map<String, DataUnit> contents = new HashMap<>();
     private Directory parentDir;
     public Directory(String name, Directory parentDir){
         super(name);
@@ -116,15 +115,58 @@ public class Directory extends DataUnit {
             for (int i = 0; i < fileLevel; i++)
                 System.out.print("\t");
             if (dataUnit instanceof Document)
-                System.out.println("-> (Document) Name: " + dataUnit + ", Type: " + ((Document) dataUnit).getType() + ", Size: " + dataUnit.getSize());
+                System.out.println("-> (Document) Name: " + dataUnit.getName() + ", Type: " + ((Document) dataUnit).getType() + ", Size: " + dataUnit.getSize());
             else {
-                System.out.println("-> (Directory) Name: " + dataUnit + ", Size: " + getSize(currentDirectory));
+                System.out.println("-> (Directory) Name: " + dataUnit.getName() + ", Size: " + getSize(currentDirectory));
 
                 recursivelyListAllFIles((Directory) dataUnit, fileLevel + 1);
             }
         }
     }
 
+
+    public void search(SimpleCriterion criterion) {
+        if (contents.isEmpty()) {
+            System.out.println("Current directory is empty.");
+        }
+        int numOfFiles = 0, sizeOfFiles = 0;
+        for (DataUnit dataUnit : contents.values()) {
+            if (criterion.checkIfMeetsCriterion(dataUnit, criterion)) {
+                if (dataUnit instanceof Document) {
+                    System.out.println("-> (Document) Name: " + dataUnit.getName());
+                }
+                else if (dataUnit instanceof Directory) {
+                    System.out.println("-> (Directory) Name: " + dataUnit.getName());
+                }
+                numOfFiles += 1;
+                sizeOfFiles += dataUnit.getSize();
+            }
+        }
+        System.out.println("File(s) found: " + numOfFiles);
+        System.out.println("Total size of file(s): " + sizeOfFiles);
+    }
+
+    public void recursivelySearch(SimpleCriterion criterion) {
+        if (contents.isEmpty()) {
+            System.out.println("Current directory is empty.");
+        }
+//        int numOfFiles = 0, sizeOfFiles = 0;
+        recursivelySearch(this, criterion);
+    }
+
+    public static void recursivelySearch(Directory currentDir, SimpleCriterion criterion) {
+        for (DataUnit dataUnit : currentDir.getContents().values()) {
+            if (criterion.checkIfMeetsCriterion(dataUnit, criterion)) {
+                if (dataUnit instanceof Document) {
+                    System.out.println("-> (Document) Name: " + dataUnit.getName());
+                }
+            }
+
+            if (dataUnit instanceof Directory) {
+                recursivelySearch((Directory) dataUnit, criterion);
+            }
+        }
+    }
 
 
 }

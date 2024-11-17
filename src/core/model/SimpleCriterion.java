@@ -1,5 +1,12 @@
 package core.model;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import java.util.List;
+import java.util.Objects;
+
 public class SimpleCriterion {
 
     private String criName;
@@ -9,6 +16,7 @@ public class SimpleCriterion {
     private static SimpleCriterion isDocument = new SimpleCriterion();
     private static boolean isDocumentCriterion = false;
     private static boolean isNegationCriterion = false;
+    private final static ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("js");
 
     public String getCriName() {
         return criName;
@@ -128,5 +136,52 @@ public class SimpleCriterion {
 
     public void toggleNegation() {
         isNegationCriterion = !isNegationCriterion;
+    }
+
+    public boolean checkIfMeetsCriterion(DataUnit dataUnit, SimpleCriterion criterion) {
+        if (dataUnit == null)
+            throw new RuntimeException("Value of data unit is null.");
+        if (isDocumentCriterion)
+            return (dataUnit instanceof Document);
+        if (criterion instanceof BinaryCriterion) {
+            // Binary criterion
+            SimpleCriterion criterion1 = ((BinaryCriterion) criterion).getCriterion1();
+            SimpleCriterion criterion2 = ((BinaryCriterion) criterion).getCriterion2();
+            String logicOp = ((BinaryCriterion) criterion).getLogicOp();
+            if (Objects.equals(logicOp, "&&"))
+                return checkIfMeetsCriterion(dataUnit, criterion1) && checkIfMeetsCriterion(dataUnit, criterion2);
+            if (Objects.equals(logicOp, "||"))
+                return checkIfMeetsCriterion(dataUnit, criterion1) || checkIfMeetsCriterion(dataUnit, criterion2);
+        }
+        else {
+            // Simple criterion
+            // 1. name contains "something"
+            if (Objects.equals(criterion.getAttrName(), "name")) {
+                String name = dataUnit.getName();
+                String val = criterion.getVal().replace("\"", "");
+                return name.contains(val);
+            }
+            // 2. type equals "txt/html/css/java"
+            else if (dataUnit instanceof Document  && Objects.equals(criterion.getAttrName(), "type")) {
+                String docType = String.valueOf(((Document) dataUnit).getType()).toLowerCase();
+                String requiredType = criterion.getVal().replace("\"", "");
+                return Objects.equals(docType, requiredType);
+            }
+            // 3. size >/</<=/>=/==/!= [int]
+            else if (Objects.equals(criterion.getAttrName(), "size")) {
+                int fileSize = dataUnit.getSize();
+                int requiredSize = Integer.parseInt(criterion.getVal());
+                return switch (criterion.getOp()) {
+                    case ">" -> fileSize > requiredSize;
+                    case "<" -> fileSize < requiredSize;
+                    case "!=" -> fileSize != requiredSize;
+                    case ">=" -> fileSize >= requiredSize;
+                    case "<=" -> fileSize <= requiredSize;
+                    case "==" -> fileSize == requiredSize;
+                    default -> throw new RuntimeException("Invalid type detected.");
+                };
+            }
+        }
+        return false;
     }
 }

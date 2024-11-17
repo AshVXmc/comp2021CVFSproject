@@ -117,7 +117,6 @@ public class CVFS {
                 System.out.println("-> " + c.getCriName() + ": " + ((BinaryCriterion) c).getCriterion1().getCriName() + " " + ((BinaryCriterion) c).getLogicOp() + " " + ((BinaryCriterion) c).getCriterion2().getCriName());
             }
             else {
-                // isDocument
                 if (Objects.equals(c.getCriName(), "isDocument")) {
                     System.out.println("-> " + c.getCriName());
                 }
@@ -127,7 +126,9 @@ public class CVFS {
             }
         }
     }
-
+    public SimpleCriterion getCriterion(String criName) {
+        return criterionsList.get(criName);
+    }
 
 
 
