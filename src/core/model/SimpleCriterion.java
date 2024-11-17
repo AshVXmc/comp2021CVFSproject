@@ -129,4 +129,38 @@ public class SimpleCriterion {
     public void toggleNegation() {
         isNegationCriterion = !isNegationCriterion;
     }
+
+    public boolean evaluate(DataUnit d) {
+        switch (this.attrName) {
+            case "name":
+                if (this.op.equals("contains")) {
+                    return d.getName().contains(this.val.replace("\"", ""));
+                }
+                break;
+            case "type":
+                if (this.op.equals("equals")) {
+                    return d.getType().equals(this.val.replace("\"", ""));
+                }
+                break;
+            case "size":
+                int dataSize = d.getSize();
+                int criterionSize = Integer.parseInt(this.val);
+                switch (this.op) {
+                    case ">":
+                        return dataSize > criterionSize;
+                    case "<":
+                        return dataSize < criterionSize;
+                    case ">=":
+                        return dataSize >= criterionSize;
+                    case "<=":
+                        return dataSize <= criterionSize;
+                    case "==":
+                        return dataSize == criterionSize;
+                    case "!=":
+                        return dataSize != criterionSize;
+                }
+                break;
+        }
+        return false;
+    }
 }

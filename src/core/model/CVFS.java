@@ -18,7 +18,6 @@ public class CVFS {
         System.out.println("New disk of size " + diskSize + " bytes successfully created.");
     }
 
-
     public void setDisk(Disk disk) {
         this.disk = disk;
         dir = disk;
@@ -127,9 +126,62 @@ public class CVFS {
             }
         }
     }
+    public void search(String criName) {
+        if (!criterionsList.containsKey(criName))
+            throw new IllegalArgumentException("Criterion named '" + criName + "' doesn't exist.");
+        System.out.println("Search results for criterion '" + criName + "':");
+        
+        int totalFiles = 0;
+        int totalSize = 0;
 
+        for (DataUnit d : dir.getContents().values()) {
+            if (criterionsList.get(criName).evaluate(d)) {
+                System.out.println(d);
+                totalFiles++;
+                totalSize += d.getSize();
+            }
+        }
+        System.out.println("Total files: " + totalFiles + ", Total size: " + totalSize + " bytes.");
+    }
 
+    public void rSearch(String criName) {
+        if (!criterionsList.containsKey(criName))
+            throw new IllegalArgumentException("Criterion named '" + criName + "' doesn't exist.");
+        System.out.println("Recursive search results for criterion '" + criName + "':");
 
+        int totalFiles = 0;
+        int totalSize = 0;
+
+        for (DataUnit d : dir.getContents().values()) {
+            if (d instanceof Directory) {
+                totalFiles += recursiveSearch((Directory) d, criName);
+            }
+            else {
+                if (criterionsList.get(criName).evaluate(d)) {
+                    System.out.println(d);
+                    totalFiles++;
+                    totalSize += d.getSize();
+                }
+            }
+        }
+        System.out.println("Total files: " + totalFiles + ", Total size: " + totalSize + " bytes.");
+    }
+
+    private int recursiveSearch(Directory directory, String criName) {
+        int totalFiles = 0;
+
+        for (DataUnit d : directory.getContents().values()) {
+            if (d instanceof Directory) {
+                totalFiles += recursiveSearch((Directory) d, criName);
+            } else {
+                if (criterionsList.get(criName).evaluate(d)) {
+                    System.out.println(d);
+                    totalFiles++;
+                }
+            }
+        }
+        return totalFiles;
+    }
 
     public void save(String filePath) {
         try {

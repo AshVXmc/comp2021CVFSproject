@@ -26,6 +26,8 @@ public abstract class DataUnit implements Serializable {
         return size;
     }
 
+    public abstract String getType();
+
     public abstract DataUnit getParentDir();
     public String toString() {
         return String.format(getName(), getSize());

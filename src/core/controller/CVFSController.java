@@ -207,8 +207,14 @@ public class CVFSController {
                 cvfs.printAllCriteria();
                 break;
             case search:
+                if (commandElements.length != 2)
+                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 2). Command formula: search [criName]");
+                cvfs.search(commandElements[1]);
                 break;
-            case rsearch:
+            case rSearch:
+                if (commandElements.length != 2)
+                    throw new IllegalArgumentException("Incorrect number of parameters (Expected 2). Command formula: rsearch [criName]");
+                cvfs.rSearch(commandElements[1]);
                 break;
             case save:
                 if (commandElements.length != 2)

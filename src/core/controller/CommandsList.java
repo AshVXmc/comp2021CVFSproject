@@ -15,7 +15,7 @@ public enum CommandsList {
     newBinaryCri,
     printAllCriteria,
     search,
-    rsearch,
+    rSearch,
     save,
     load,
     quit,
