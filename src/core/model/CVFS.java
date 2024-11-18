@@ -125,9 +125,7 @@ public class CVFS {
             }
         }
     }
-    public SimpleCriterion getCriterion(String criName) {
-        return criterionsList.get(criName);
-    }    public void search(String criName) {
+    public void search(String criName) {
         if (!criterionsList.containsKey(criName))
             throw new IllegalArgumentException("Criterion named '" + criName + "' doesn't exist.");
         System.out.println("Search results for criterion '" + criName + "':");
