@@ -116,7 +116,6 @@ public class CVFS {
                 System.out.println("-> " + c.getCriName() + ": " + ((BinaryCriterion) c).getCriterion1().getCriName() + " " + ((BinaryCriterion) c).getLogicOp() + " " + ((BinaryCriterion) c).getCriterion2().getCriName());
             }
             else {
-                // isDocument
                 if (Objects.equals(c.getCriName(), "isDocument")) {
                     System.out.println("-> " + c.getCriName());
                 }
@@ -126,7 +125,9 @@ public class CVFS {
             }
         }
     }
-    public void search(String criName) {
+    public SimpleCriterion getCriterion(String criName) {
+        return criterionsList.get(criName);
+    }    public void search(String criName) {
         if (!criterionsList.containsKey(criName))
             throw new IllegalArgumentException("Criterion named '" + criName + "' doesn't exist.");
         System.out.println("Search results for criterion '" + criName + "':");

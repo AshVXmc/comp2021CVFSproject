@@ -2,6 +2,7 @@ package core.controller;
 import core.model.*;
 import core.view.CVFSView;
 
+import javax.script.ScriptException;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -196,7 +197,7 @@ public class CVFSController {
                 if (!SimpleCriterion.isValidCriterionName(commandElements[2]))
                     throw new IllegalArgumentException("Invalid Criterion name: '" + commandElements[2] + "'");
                 if (!BinaryCriterion.isValidOp(commandElements[3]))
-                    throw new IllegalArgumentException("Invalid Binary Criterion operator: '" + commandElements[2] + "'");
+                    throw new IllegalArgumentException("Invalid Binary Criterion operator: '" + commandElements[3] + "'");
                 if (!SimpleCriterion.isValidCriterionName(commandElements[4]))
                     throw new IllegalArgumentException("Invalid Criterion name: '" + commandElements[4] + "'");
                 cvfs.createNewBinaryCriterion(commandElements[1], commandElements[2], commandElements[3], commandElements[4]);

@@ -1,5 +1,12 @@
 package core.model;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import java.util.List;
+import java.util.Objects;
+
 public class SimpleCriterion {
 
     private String criName;
@@ -9,6 +16,7 @@ public class SimpleCriterion {
     private static SimpleCriterion isDocument = new SimpleCriterion();
     private static boolean isDocumentCriterion = false;
     private static boolean isNegationCriterion = false;
+    private final static ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("js");
 
     public String getCriName() {
         return criName;
