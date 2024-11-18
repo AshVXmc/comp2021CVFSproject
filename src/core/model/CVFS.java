@@ -89,6 +89,8 @@ public class CVFS {
         if (!criterionsList.containsKey(criName2))
             throw new IllegalArgumentException("Criterion to be negated, named '" + criName2 + "', doesn't exist.");
         criterionsList.put(criName1, criterionsList.get(criName2).getNegativeCriterion(criName1));
+        System.out.println("New Negation named '" + criName1 + "' successfully created." +
+                "\nCriterion " + criName2 +" will be referenced by " + criName1);
     }
 
     public void createNewBinaryCriterion(String criName1, String criName3, String logicOp, String criName4) {
