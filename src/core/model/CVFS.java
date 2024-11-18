@@ -13,15 +13,29 @@ public class CVFS {
     private Directory dir;
     private final Map<String, SimpleCriterion> criterionsList = new HashMap<>();
 
-    public void createNewDisk(int diskSize) {
-        disk = new Disk(diskSize);
-        dir = disk;
-        System.out.println("New disk of size " + diskSize + " bytes successfully created.");
-    }
-
     public void setDisk(Disk disk) {
         this.disk = disk;
         dir = disk;
+    }
+
+    public void createNewDisk(String diskSizeStr) {
+        int diskSize;
+        try {
+            diskSize = Integer.parseInt(diskSizeStr);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Disk Size has to be a number.");
+        }
+        
+        if (diskSize <= 0)
+            throw new IllegalArgumentException("Disk size must be greater than 0.");
+        
+        try {
+            disk = new Disk(diskSize);
+            dir = disk;
+            System.out.println("New disk of size " + diskSize + " bytes successfully created.");
+        } catch (Exception e) {
+            System.err.println("Error creating new disk: " + e.getMessage());
+        }
     }
 
     public Directory getDir() {
