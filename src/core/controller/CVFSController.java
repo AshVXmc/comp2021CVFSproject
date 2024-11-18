@@ -218,6 +218,8 @@ public class CVFSController {
                 cvfs.rSearch(commandElements[1]);
                 break;
             case save:
+                if (cvfs.getDir() == null)
+                    throw new IllegalStateException("No disk detected. Please create a new disk.");
                 if (commandElements.length != 2)
                     throw new IllegalArgumentException("Incorrect number of parameters (Expected 2). Command formula: save [filePath]");
                 cvfs.save(commandElements[1]);
