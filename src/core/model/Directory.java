@@ -23,7 +23,7 @@ public class Directory extends DataUnit {
         for (DataUnit dataUnit : currentDirectory.getContents().values()) {
             if (dataUnit.getParentDir() == currentDirectory) {
                 size += dataUnit.getSize();
-                System.out.println("doc counted: " + dataUnit.getName());
+//                System.out.println("doc counted: " + dataUnit.getName());
             }
         }
         return 40 + size;

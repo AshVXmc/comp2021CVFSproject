@@ -146,8 +146,8 @@ public class SimpleCriterion {
                 }
                 break;
             case "type":
-                if (this.op.equals("equals")) {
-                    return d.getType().equals(this.val.replace("\"", ""));
+                if (this.op.equals("equals") && d instanceof Document) {
+                    return d.getType().toString().toLowerCase().equals(this.val.replace("\"", ""));
                 }
                 break;
             case "size":
