@@ -1,14 +1,6 @@
 package core.model;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import java.util.List;
-import java.util.Objects;
-
 public class SimpleCriterion {
-
     private String criName;
     private String attrName;
     private String op;
@@ -16,7 +8,6 @@ public class SimpleCriterion {
     private static SimpleCriterion isDocument = new SimpleCriterion();
     private static boolean isDocumentCriterion = false;
     private static boolean isNegationCriterion = false;
-    private final static ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("js");
 
     public String getCriName() {
         return criName;
@@ -139,21 +130,23 @@ public class SimpleCriterion {
     }
 
     public boolean evaluate(DataUnit d) {
-        switch (this.attrName) {
+        if (this.getCriName().equals("isDocument"))
+            return d instanceof Document;
+        switch (this.getAttrName()) {
             case "name":
-                if (this.op.equals("contains")) {
-                    return d.getName().contains(this.val.replace("\"", ""));
+                if (this.getOp().equals("contains")) {
+                    return d.getName().contains(this.getVal().replace("\"", ""));
                 }
                 break;
             case "type":
-                if (this.op.equals("equals") && d instanceof Document) {
-                    return d.getType().toString().toLowerCase().equals(this.val.replace("\"", ""));
+                if (this.getOp().equals("equals") && d instanceof Document) {
+                    return d.getType().toString().toLowerCase().equals(this.getVal().replace("\"", ""));
                 }
                 break;
             case "size":
                 int dataSize = d.getSize();
-                int criterionSize = Integer.parseInt(this.val);
-                switch (this.op) {
+                int criterionSize = Integer.parseInt(this.getVal());
+                switch (this.getOp()) {
                     case ">":
                         return dataSize > criterionSize;
                     case "<":
