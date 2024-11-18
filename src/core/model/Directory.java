@@ -1,5 +1,6 @@
 package core.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -104,28 +105,35 @@ public class Directory extends DataUnit {
             if (dataUnit instanceof Directory)
                 System.out.println("-> (Directory) Name: " + dataUnit + ", Size: " + getSize(this));
             if (dataUnit instanceof Document)
-                System.out.println("-> (Document) Name: " + dataUnit + ", Type: " + ((Document) dataUnit).getType() + ", Size: " + dataUnit.getSize());
+                System.out.println("-> (Document) Name: " + dataUnit + ", Type: " + dataUnit.getType() + ", Size: " + dataUnit.getSize());
         }
     }
 
-    public void recursivelyListAllFIles() {
+    public void recursivelyListAllFiles() {
         if (contents.isEmpty())
             System.out.println("Current directory is empty.");
-        recursivelyListAllFIles(this, 0);
+        recursivelyListAllFiles(this, 0);
     }
+    private final ArrayList<DataUnit> reachedFiles = new ArrayList<DataUnit>();
 
-    public void recursivelyListAllFIles(Directory currentDirectory, int fileLevel) {
+    public void recursivelyListAllFiles(Directory currentDirectory, int fileLevel) {
         for (DataUnit dataUnit : currentDirectory.getContents().values()) {
-
+            if (reachedFiles.contains(dataUnit)) {
+                reachedFiles.clear();
+                return;
+            }
             for (int i = 0; i < fileLevel; i++)
                 System.out.print("\t");
-            if (dataUnit instanceof Document)
-                System.out.println("-> (Document) Name: " + dataUnit.getName() + ", Type: " + ((Document) dataUnit).getType() + ", Size: " + dataUnit.getSize());
-            else {
+            if (dataUnit instanceof Document) {
+                reachedFiles.add(dataUnit);
+                System.out.println("-> (Document) Name: " + dataUnit.getName() + ", Type: " + dataUnit.getType() + ", Size: " + dataUnit.getSize());
+            }
+            if (dataUnit instanceof Directory) {
+                reachedFiles.add(dataUnit);
                 System.out.println("-> (Directory) Name: " + dataUnit.getName() + ", Size: " + getSize(currentDirectory));
-
-                recursivelyListAllFIles((Directory) dataUnit, fileLevel + 1);
+                recursivelyListAllFiles((Directory) dataUnit, fileLevel + 1);
             }
         }
     }
+
 }

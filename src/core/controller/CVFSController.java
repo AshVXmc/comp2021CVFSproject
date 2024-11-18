@@ -1,14 +1,11 @@
 package core.controller;
 import core.model.*;
-import core.view.CVFSView;
-
-import javax.script.ScriptException;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class CVFSController {
     private static CVFS cvfs = null;
-    private static CVFSView cvfsView = null;
+
     private final Scanner scanner = new Scanner(System.in);
 
 
@@ -16,9 +13,8 @@ public class CVFSController {
         return scanner.nextLine();
     }
 
-    public CVFSController(CVFS cvfs, CVFSView cvfsView) {
+    public CVFSController(CVFS cvfs) {
         CVFSController.cvfs = cvfs;
-        CVFSController.cvfsView = cvfsView;
     }
 
     public void startCLITerminal(){
@@ -133,7 +129,7 @@ public class CVFSController {
                     throw new IllegalStateException("No disk detected. Please create a new disk.");
                 if (commandElements.length != 1)
                     throw new IllegalArgumentException("Incorrect number of parameters (Expected 1). Command formula: rList");
-                cvfs.getDir().recursivelyListAllFIles();
+                cvfs.getDir().recursivelyListAllFiles();
                 break;
 
             case newSimpleCri:

@@ -1,9 +1,13 @@
 package core.model;
 
+import core.controller.CVFSController;
+import core.controller.CommandsList;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -152,7 +156,7 @@ public class CVFS {
 
         for (DataUnit d : dir.getContents().values()) {
             if (criterionsList.get(criName).evaluate(d)) {
-                System.out.println(d);
+                System.out.println("-> " + d.getName());
                 totalFiles++;
                 totalSize += d.getSize();
             }
@@ -160,43 +164,41 @@ public class CVFS {
         System.out.println("Total files: " + totalFiles + ", Total size: " + totalSize + " bytes.");
     }
 
+    private final ArrayList<DataUnit> reachedFiles = new ArrayList<>();
+
+
     public void rSearch(String criName) {
         if (!criterionsList.containsKey(criName))
             throw new IllegalArgumentException("Criterion named '" + criName + "' doesn't exist.");
         System.out.println("Recursive search results for criterion '" + criName + "':");
-
-        int totalFiles = 0;
-        int totalSize = 0;
-
-        for (DataUnit d : dir.getContents().values()) {
-            if (d instanceof Directory) {
-                totalFiles += recursiveSearch((Directory) d, criName);
-            }
-            else {
-                if (criterionsList.get(criName).evaluate(d)) {
-                    System.out.println(d);
-                    totalFiles++;
-                    totalSize += d.getSize();
-                }
-            }
-        }
-        System.out.println("Total files: " + totalFiles + ", Total size: " + totalSize + " bytes.");
+        recursiveSearch(getDir(), criName);
     }
 
-    private int recursiveSearch(Directory directory, String criName) {
-        int totalFiles = 0;
+    private void recursiveSearch(Directory directory, String criName) {
 
         for (DataUnit d : directory.getContents().values()) {
+            if (reachedFiles.contains(d)) {
+                int totalFiles = reachedFiles.size();
+                int totalSize = 0;
+                for (DataUnit dataUnit : reachedFiles) {
+                    totalSize += dataUnit.getSize();
+                }
+                reachedFiles.clear();
+                System.out.println("Total files: " + totalFiles + ", Total size: " + totalSize + " bytes.");
+                return;
+            }
             if (d instanceof Directory) {
-                totalFiles += recursiveSearch((Directory) d, criName);
+                System.out.println("-> " + d.getName());
+                reachedFiles.add(d);
+                recursiveSearch((Directory) d, criName);
             } else {
                 if (criterionsList.get(criName).evaluate(d)) {
-                    System.out.println(d);
-                    totalFiles++;
+                    System.out.println("-> " + d.getName());
+                    reachedFiles.add(d);
                 }
             }
         }
-        return totalFiles;
+
     }
 
     public void save(String filePath) {
