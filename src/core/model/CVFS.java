@@ -1,5 +1,6 @@
 package core.model;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -186,7 +187,11 @@ public class CVFS {
 
     public void save(String filePath) {
         try {
-            FileOutputStream fileOut = new FileOutputStream(filePath);
+            File file = new File(filePath);
+            if (file.isDirectory()) {
+                throw new IllegalArgumentException("The provided path is a directory. Please provide a file path.");
+            }
+            FileOutputStream fileOut = new FileOutputStream(file);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(disk);
             out.close();
@@ -199,6 +204,10 @@ public class CVFS {
 
     public void load(String filePath) {
         try {
+            File file = new File(filePath);
+            if (file.isDirectory()) {
+                throw new IllegalArgumentException("The provided path is a directory. Please provide a file path.");
+            }
             disk = Disk.loadDisk(filePath);
             dir = disk;
             System.out.println("Disk loaded from " + filePath);
@@ -206,5 +215,4 @@ public class CVFS {
             System.err.println("Error loading disk: " + e.getMessage());
         }
     }
-
 }
