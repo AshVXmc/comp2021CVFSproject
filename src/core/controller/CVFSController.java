@@ -17,17 +17,18 @@ public class CVFSController {
         CVFSController.cvfs = cvfs;
     }
 
-    public void startCLITerminal(){
+    public void startCLITerminal() {
         String cmd = getScannerNextLine();
         CommandsList cmdType = CommandTypeGetter.getCommandType(cmd);
 
-        while (cmdType == CommandsList.illegal){
+        while (cmdType == CommandsList.illegal) {
 
             cmd = getScannerNextLine();
             cmdType = CommandTypeGetter.getCommandType(cmd);
         }
         parseCommand(cmd, cmdType);
     }
+
     public static void parseCommand(String command, CommandsList commandType) {
         Object[] resourceList;
         String name;
@@ -203,7 +204,25 @@ public class CVFSController {
                 break;
 
             case quit:
-                System.exit(0);
+                if (CVFS.hasUnsavedChanges) {
+                    System.out.println("You have unsaved changes. Would you like to save them before quitting? (yes/no)");
+                    Scanner scanner = new Scanner(System.in);
+                    String response = scanner.nextLine().trim().toLowerCase();
+
+                    while (!response.equals("yes") && !response.equals("no")) {
+                        System.out.println("Invalid input. Please type 'yes' or 'no'.");
+                        response = scanner.nextLine().trim().toLowerCase();
+                    }
+                    if (response.equals("yes")) {
+                        // Call save method
+                        System.out.println("Please input a [filePath] to save.");
+                        String filePath = scanner.nextLine().trim();
+                        cvfs.save(filePath);
+                    }
+                }
+                    System.out.println("Exiting CVFS...");
+                    System.exit(0);
+
         }
     }
 }

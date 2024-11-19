@@ -49,6 +49,7 @@ public class Directory extends DataUnit {
         updateSize(dir.getSize());
         contents.put(name, dir);
         System.out.println("New directory named " + name + " created.");
+        CVFS.hasUnsavedChanges = true;
         return dir;
     }
 
@@ -72,6 +73,7 @@ public class Directory extends DataUnit {
         contents.put(name, document);
         System.out.println("New document named '" + name + "." + type + "' created.");
         System.out.println("Document Content: " + content);
+        CVFS.hasUnsavedChanges = true;
     }
 
     public void deleteDocument(String docName){

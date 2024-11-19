@@ -16,6 +16,7 @@ public class CVFS {
     private Disk disk;
     private Directory dir;
     private final Map<String, SimpleCriterion> criterionsList = new HashMap<>();
+    public static boolean hasUnsavedChanges;
 
     public void setDisk(Disk disk) {
         this.disk = disk;
@@ -40,6 +41,7 @@ public class CVFS {
         } catch (Exception e) {
             System.err.println("Error creating new disk: " + e.getMessage());
         }
+        hasUnsavedChanges = true;
     }
 
     public Directory getDir() {
