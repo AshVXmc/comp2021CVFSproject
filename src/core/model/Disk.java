@@ -3,8 +3,9 @@ package core.model;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Serializable;
 
-public class Disk extends Directory{
+public class Disk extends Directory implements Serializable {
     private final int maxSize;
 
     public Disk(int maxSize) {
@@ -17,21 +18,14 @@ public class Disk extends Directory{
         return maxSize;
     }
 
-    public static Disk loadDisk(String filePath) throws IOException, ClassNotFoundException {
-
-        FileInputStream fileIn = new FileInputStream(filePath);
-
-        ObjectInputStream in = new ObjectInputStream(fileIn);
-
-        Disk disk = (Disk) in.readObject();
-
-        in.close();
-
-        fileIn.close();
-
-        return disk;
-
-    }
+//    public static Disk loadDisk(String filePath) throws IOException, ClassNotFoundException {
+//        FileInputStream fileIn = new FileInputStream(filePath);
+//        ObjectInputStream in = new ObjectInputStream(fileIn);
+//        Disk disk = (Disk) in.readObject();
+//        in.close();
+//        fileIn.close();
+//        return disk;
+//    }
 
     @Override
     public StringBuilder getPath() {
