@@ -220,9 +220,8 @@ public class CVFSController {
                         cvfs.save(filePath);
                     }
                 }
-                    System.out.println("Exiting CVFS...");
-                    System.exit(0);
-
+                System.out.println("Exiting CVFS...");
+                System.exit(0);
         }
     }
 }

@@ -1,12 +1,6 @@
 package core.model;
 
-import core.controller.CVFSController;
-import core.controller.CommandsList;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +9,7 @@ import java.util.Objects;
 public class CVFS {
     private Disk disk;
     private Directory dir;
-    private final Map<String, SimpleCriterion> criterionsList = new HashMap<>();
+    private Map<String, SimpleCriterion> criterionsList = new HashMap<>();
     public static boolean hasUnsavedChanges;
 
     public void setDisk(Disk disk) {
@@ -48,6 +42,13 @@ public class CVFS {
         return dir;
     }
 
+    public Map<String, SimpleCriterion> getCriterionsList() {
+        return criterionsList;
+    }
+
+    public void setCriterionsList(HashMap<String, SimpleCriterion> newCriterionsList) {
+        criterionsList = newCriterionsList;
+    }
     public void setDir(Directory dir) {
         this.dir = dir;
     }
@@ -212,9 +213,12 @@ public class CVFS {
             FileOutputStream fileOut = new FileOutputStream(file);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(disk);
+            out.writeObject(disk.getContents());
+            out.writeObject(getCriterionsList());
+            System.out.println("Disk saved to " + filePath);
             out.close();
             fileOut.close();
-            System.out.println("Disk saved to " + filePath);
+            hasUnsavedChanges = false;
         } catch (IOException e) {
             System.err.println("Error saving disk: " + e.getMessage());
         }
@@ -226,9 +230,19 @@ public class CVFS {
             if (file.isDirectory()) {
                 throw new IllegalArgumentException("The provided path is a directory. Please provide a file path.");
             }
-            disk = Disk.loadDisk(filePath);
-            dir = disk;
+            FileInputStream fileIn = new FileInputStream(filePath);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            Disk loadedDisk = (Disk) in.readObject();
+            HashMap<String, DataUnit> loadedContents = (HashMap<String, DataUnit>) in.readObject();
+            HashMap<String, SimpleCriterion> loadedCriteriaList = (HashMap<String, SimpleCriterion>) in.readObject();
+            loadedDisk.setContents(loadedContents);
+            setDisk(loadedDisk);
+            setCriterionsList(loadedCriteriaList);
+            in.close();
+            fileIn.close();
             System.out.println("Disk loaded from " + filePath);
+
+
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Error loading disk: " + e.getMessage());
         }

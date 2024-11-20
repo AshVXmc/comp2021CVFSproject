@@ -1,6 +1,8 @@
 package core.model;
 
-public class SimpleCriterion {
+import java.io.Serializable;
+
+public class SimpleCriterion implements Serializable {
     private String criName;
     private String attrName;
     private String op;

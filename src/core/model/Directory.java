@@ -42,6 +42,10 @@ public class Directory extends DataUnit {
         return contents;
     }
 
+    public void setContents(HashMap<String, DataUnit> newContents) {
+        contents = newContents;
+    }
+
 
     public Directory newDir(String name) {
         if (contents.get(name) != null) throw new IllegalArgumentException("A file of this name already exists.");
